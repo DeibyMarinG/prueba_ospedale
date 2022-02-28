@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tareas;
+use Illuminate\Support\Facades\Auth;
 
 class ApiTareasController extends Controller
 {
@@ -14,7 +15,7 @@ class ApiTareasController extends Controller
      */
     public function index()
     {
-        return Tareas::get();
+        return Tareas::orderBy('fecha_final','desc')-> get();
     }
 
     /**
@@ -35,7 +36,17 @@ class ApiTareasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datos =new Tareas();
+        //estado en 0 sin terminar y 1 es terminado
+        $datos->nombre =$request->nombre;
+        $datos->descripcion =$request->descripcion;
+        $datos->fecha_inicio =$request->fecha_inicio;
+        $datos->fecha_final =$request->fecha_final;
+        $datos->user_id =Auth::id();
+        $datos->estado = 0;
+        $datos->save();
+        echo $datos;
+        return 'Datos Guardados correctamente';
     }
 
     /**
@@ -80,6 +91,7 @@ class ApiTareasController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $tarea = Tareas::find( $id );
+        $tarea->delete();
     }
 }

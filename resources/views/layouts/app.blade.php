@@ -9,7 +9,8 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-   
+   <!-- Scripts -->
+   <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -37,7 +38,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    
 </head>
 <body>
     <div id="app">
@@ -99,7 +99,6 @@
             @yield('content')
         </main>
     </div>
-     <!-- Scripts -->
-     <script src="{{ asset('js/vue.js') }}" ></script>
+
 </body>
 </html>

@@ -37,7 +37,7 @@
                               <td class="table-danger" v-if="tarea.estado==0"></td>
                               <td class="table-success" v-else></td>
                               <td>
-                              <button type="button" class="btn btn-outline-info">Editar</button>
+                              <button type="button" class="btn btn-outline-info"  @click="editarTarea(tarea)">Editar</button>
                               <button type="button" class="btn btn-outline-danger" @click="eliminarTarea(tarea)">Eliminar</button>
                               </td>
                             </tr>

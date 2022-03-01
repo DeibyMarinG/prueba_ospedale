@@ -180,6 +180,36 @@ var app = new Vue({
                       })
                 }
               })
+        },
+        editarTarea(tarea){
+            const { value: formValues } =  Swal.fire({
+                title: 'Multiple inputs',
+                html:
+                  '<h2>Nombre<h2>'+
+                  '<input id="swal-input1" value="'+
+                  tarea.nombre+
+                  '" class="swal2-input">' +
+                  '<h2>Descripcion<h2>'+
+                  '<input id="swal-input2" value="'+
+                  moment(String(tarea.descripcion)).format('YYYY-MM-DDThh:mm')+
+                  '" class="swal2-input">'+
+                  '<h2>Fecha inicial<h2>'+
+                  '<input id="swal-input3" type="datetime-local" value="'+
+                  tarea.fecha_inicio+
+                  '" class="swal2-input">' +
+                  '<input id="swal-input2" class="swal2-input">',
+                focusConfirm: false,
+                preConfirm: () => {
+                  return [
+                    document.getElementById('swal-input1').value,
+                    document.getElementById('swal-input2').value
+                  ]
+                }
+              })
+              
+              if (formValues) {
+                Swal.fire(JSON.stringify(formValues))
+              }
         }
     },
     //despues que vue ejecuta realiza un comando

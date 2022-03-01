@@ -78,9 +78,19 @@ class ApiTareasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $datos =new Tareas();
+        //estado en 0 sin terminar y 1 es terminado
+        $datos->nombre =$request->nombre;
+        $datos->descripcion =$request->descripcion;
+        $datos->fecha_inicio =$request->fecha_inicio;
+        $datos->fecha_final =$request->fecha_final;
+        $datos->user_id =Auth::id();
+        $datos->estado = $request->estado;
+        $datos->save();
+        echo $datos;
+        return 'Datos Guardados correctamente';
     }
 
     /**

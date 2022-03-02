@@ -36,7 +36,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
     },
     methods:{
         getTareas(){
-            let url = '/tareas';
+            let url = '/tareas/consultar';
             axios.get(url).then(response=>{
                 console.log(response.data)
                 this.tareas=response.data;
@@ -145,7 +145,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
                         }
                         console.log(tarea_entregar);
                         const answers = JSON.stringify(result.value);
-                        let url = '/tareas';
+                        let url = '/tareas/crear';
                         await axios.post(url,tarea_entregar).then(response=>{
                             console.log(response.data);
                             this.mensaje=response.data;
@@ -183,7 +183,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
                 reverseButtons: true
               }).then(async (result) => {
                 if (result.isConfirmed) {
-                    let url ='/tareas/'+tarea.id
+                    let url ='/tareas/borrar/'+tarea.id
                     await axios.delete(url).then(response=>{
                         console.log(response.data)
                         this.mensaje=response.data;
@@ -313,6 +313,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
               }).then(async(result) => {
                 if (result.value) {
                     const tarea_entregar={
+                        id:tarea.id,
                         nombre:result.value[0],
                         descripcion:result.value[1],
                         fecha_inicio:result.value[2],
@@ -321,7 +322,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
                     }
                     console.log(tarea_entregar);
                     const answers = JSON.stringify(result.value);
-                    let url = '/tareas/'+tarea.id;
+                    let url = '/tareas/actualizar/'+tarea.id;
                     await axios.put(url,tarea_entregar).then(response=>{
                         console.log(response.data);
                         this.mensaje=response.data;

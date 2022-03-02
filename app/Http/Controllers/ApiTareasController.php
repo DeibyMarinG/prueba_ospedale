@@ -13,11 +13,24 @@ class ApiTareasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function __construct()
     {
-        return Tareas::orderBy('fecha_final','desc')-> get();
+        $this->middleware('auth.basic');
     }
 
+    public function index(Request $request)
+    {
+        
+        $consulta = new Tareas;
+        if($request->header('estado')!=NULL){
+            $consulta=$consulta->where('estado',$request->header('estado'));
+        }
+        if($request->header('user_id')!=NULL){
+            $consulta=$consulta->where('user_id',$request->header('user_id'));
+        }
+        
+            return $consulta->orderBy('fecha_final','desc')-> get();
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -80,7 +93,7 @@ class ApiTareasController extends Controller
      */
     public function update(Request $request)
     {
-        $datos =new Tareas();
+        $datos = Tareas::find($request->id);
         //estado en 0 sin terminar y 1 es terminado
         $datos->nombre =$request->nombre;
         $datos->descripcion =$request->descripcion;

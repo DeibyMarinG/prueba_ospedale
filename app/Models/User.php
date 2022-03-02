@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Tareas;
 use App\Models\Role;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -73,5 +74,10 @@ class User extends Authenticatable
             return true;
         }
         return false;
+    }
+
+    //Un usuario tiene varias tareas
+    public function tareas(){
+        return $this->hasMany('App\Models\Tareas');
     }
 }

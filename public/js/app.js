@@ -5451,7 +5451,7 @@ var app = new Vue({
     getTareas: function getTareas() {
       var _this = this;
 
-      var url = '/tareas';
+      var url = '/tareas/consultar';
       axios.get(url).then(function (response) {
         console.log(response.data);
         _this.tareas = response.data;
@@ -5560,7 +5560,7 @@ var app = new Vue({
                   };
                   console.log(tarea_entregar);
                   answers = JSON.stringify(result.value);
-                  url = '/tareas';
+                  url = '/tareas/crear';
                   _context.next = 7;
                   return axios.post(url, tarea_entregar).then(function (response) {
                     console.log(response.data);
@@ -5623,7 +5623,7 @@ var app = new Vue({
                     break;
                   }
 
-                  url = '/tareas/' + tarea.id;
+                  url = '/tareas/borrar/' + tarea.id;
                   _context2.next = 4;
                   return axios["delete"](url).then(function (response) {
                     console.log(response.data);
@@ -5759,6 +5759,7 @@ var app = new Vue({
                   }
 
                   tarea_entregar = {
+                    id: tarea.id,
                     nombre: result.value[0],
                     descripcion: result.value[1],
                     fecha_inicio: result.value[2],
@@ -5767,7 +5768,7 @@ var app = new Vue({
                   };
                   console.log(tarea_entregar);
                   answers = JSON.stringify(result.value);
-                  url = '/tareas/' + tarea.id;
+                  url = '/tareas/actualizar/' + tarea.id;
                   _context3.next = 7;
                   return axios.put(url, tarea_entregar).then(function (response) {
                     console.log(response.data);

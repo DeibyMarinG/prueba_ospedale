@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) { 
     return $request->user();
 });
-
+Route::resource('tareas/consultar', 'App\Http\Controllers\ApiTareasController')->names('api.tareas');
+Route::resource('tareas/crear', 'App\Http\Controllers\ApiTareasController')->names('api.tareas');
+Route::resource('tareas/borrar', 'App\Http\Controllers\ApiTareasController')->names('api.tareas');
+Route::resource('tareas/actualizar', 'App\Http\Controllers\ApiTareasController')->names('api.tareas');

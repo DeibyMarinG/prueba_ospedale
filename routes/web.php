@@ -18,5 +18,14 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::middleware('auth')->resource('tareas/consultar_web', 'App\Http\Controllers\ApiTareasController')->names('tareas');
+Route::middleware('auth')->resource('tareas/crear_web', 'App\Http\Controllers\ApiTareasController')->names('api.tareas');
+Route::middleware('auth')->resource('tareas/borrar_web', 'App\Http\Controllers\ApiTareasController')->names('api.tareas');
+Route::middleware('auth')->resource('tareas/actualizar_web', 'App\Http\Controllers\ApiTareasController')->names('api.tareas');
+Route::middleware('auth')->get('token', 'App\Http\Controllers\ApiTareasController@crearToken');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::middleware('auth')->resource('perfil','App\Http\Controllers\Usuarios')->names('api.usuarios');
+Route::middleware('auth')->get('/perfiles', function () {
+    return view('perfiles');
+});

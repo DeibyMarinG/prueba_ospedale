@@ -5445,13 +5445,14 @@ var app = new Vue({
   el: '#app',
   data: {
     message: 'Hello Vue!',
-    tareas: []
+    tareas: [],
+    usuarios: []
   },
   methods: {
     getTareas: function getTareas() {
       var _this = this;
 
-      var url = '/tareas/consultar';
+      var url = '/tareas/consultar_web';
       axios.get(url).then(function (response) {
         console.log(response.data);
         _this.tareas = response.data;
@@ -5560,7 +5561,7 @@ var app = new Vue({
                   };
                   console.log(tarea_entregar);
                   answers = JSON.stringify(result.value);
-                  url = '/tareas/crear';
+                  url = '/tareas/crear_web';
                   _context.next = 7;
                   return axios.post(url, tarea_entregar).then(function (response) {
                     console.log(response.data);
@@ -5623,7 +5624,7 @@ var app = new Vue({
                     break;
                   }
 
-                  url = '/tareas/borrar/' + tarea.id;
+                  url = '/tareas/borrar_web/' + tarea.id;
                   _context2.next = 4;
                   return axios["delete"](url).then(function (response) {
                     console.log(response.data);
@@ -5768,7 +5769,7 @@ var app = new Vue({
                   };
                   console.log(tarea_entregar);
                   answers = JSON.stringify(result.value);
-                  url = '/tareas/actualizar/' + tarea.id;
+                  url = '/tareas/actualizar_web/' + tarea.id;
                   _context3.next = 7;
                   return axios.put(url, tarea_entregar).then(function (response) {
                     console.log(response.data);
@@ -5798,11 +5799,276 @@ var app = new Vue({
         };
       }()),
           formValues = _Swal$fire$then.value;
+    },
+    crearToken: function crearToken() {
+      var url = '/token';
+      axios.get(url).then(function (response) {
+        console.log(response.data);
+        Swal.fire('Tu nuevo Bearer token es:', response.data, 'info');
+      });
+    },
+    getUsuarios: function getUsuarios() {
+      var _this5 = this;
+
+      var url = '/perfil';
+      axios.get(url).then(function (response) {
+        console.log(response.data);
+        _this5.usuarios = response.data;
+      });
+    },
+    cambiarPassword: function cambiarPassword(usuario) {
+      var _this6 = this;
+
+      var _Swal$fire$then2 = Swal.fire({
+        title: 'Enter your password',
+        input: 'password',
+        inputLabel: 'Password',
+        inputPlaceholder: 'Enter your password',
+        inputAttributes: {
+          maxlength: 10,
+          autocapitalize: 'off',
+          autocorrect: 'off'
+        }
+      }).then( /*#__PURE__*/function () {
+        var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(result) {
+          var usuario_entregar, answers, url;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+            while (1) {
+              switch (_context4.prev = _context4.next) {
+                case 0:
+                  if (!result.value) {
+                    _context4.next = 9;
+                    break;
+                  }
+
+                  usuario_entregar = {
+                    id: usuario.id,
+                    password: result.value
+                  };
+                  console.log(usuario_entregar);
+                  answers = JSON.stringify(result.value);
+                  url = '/perfil/' + usuario.id;
+                  _context4.next = 7;
+                  return axios.put(url, usuario_entregar).then(function (response) {
+                    console.log(response.data);
+                    _this6.mensaje = response.data;
+                  });
+
+                case 7:
+                  _this6.getUsuarios();
+
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Editado satisfactorio',
+                    showConfirmButton: false,
+                    timer: 1400
+                  });
+
+                case 9:
+                case "end":
+                  return _context4.stop();
+              }
+            }
+          }, _callee4);
+        }));
+
+        return function (_x4) {
+          return _ref4.apply(this, arguments);
+        };
+      }()),
+          password = _Swal$fire$then2.value;
+    },
+    cambiarDatosUsuarios: function cambiarDatosUsuarios(usuario) {
+      var _this7 = this;
+
+      var _Swal$fire$then3 = Swal.fire({
+        title: 'Editar Usuario',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Guardar',
+        html: '<h2>Nombre<h2>' + '<input id="swal-input1" value="' + usuario.name + '" class="swal2-input" >' + '<h2>Descripcion<h2>' + '<input id="swal-input2" value="' + usuario.email + '" class="swal2-input" type="email">',
+        focusConfirm: false,
+        preConfirm: function preConfirm() {
+          var name = document.getElementById('swal-input1').value;
+          var email = document.getElementById('swal-input2').value;
+
+          if (name == "") {
+            toastr["error"]("Nombre no debe ser vacío", "Error");
+            toastr.options = {
+              "closeButton": false,
+              "debug": false,
+              "newestOnTop": false,
+              "progressBar": false,
+              "positionClass": "toast-top-right",
+              "preventDuplicates": true,
+              "onclick": null,
+              "showDuration": "300",
+              "hideDuration": "1000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            };
+            return false;
+          }
+
+          if (email == "") {
+            toastr["error"]("Correo no debe ser vacío", "Error");
+            toastr.options = {
+              "closeButton": false,
+              "debug": false,
+              "newestOnTop": false,
+              "progressBar": false,
+              "positionClass": "toast-top-right",
+              "preventDuplicates": true,
+              "onclick": null,
+              "showDuration": "300",
+              "hideDuration": "1000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            };
+            return false;
+          } else {
+            return [document.getElementById('swal-input1').value, document.getElementById('swal-input2').value];
+          }
+        }
+      }).then( /*#__PURE__*/function () {
+        var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(result) {
+          var usuario_entregar, answers, url;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+            while (1) {
+              switch (_context5.prev = _context5.next) {
+                case 0:
+                  if (!result.value) {
+                    _context5.next = 9;
+                    break;
+                  }
+
+                  usuario_entregar = {
+                    id: usuario.id,
+                    name: result.value[0],
+                    email: result.value[1]
+                  };
+                  console.log(usuario_entregar);
+                  answers = JSON.stringify(result.value);
+                  url = '/perfil/' + usuario.id;
+                  _context5.next = 7;
+                  return axios.put(url, usuario_entregar).then(function (response) {
+                    console.log(response.data);
+                    _this7.mensaje = response.data;
+                  });
+
+                case 7:
+                  _this7.getUsuarios();
+
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Editado satisfactorio',
+                    showConfirmButton: false,
+                    timer: 1400
+                  });
+
+                case 9:
+                case "end":
+                  return _context5.stop();
+              }
+            }
+          }, _callee5);
+        }));
+
+        return function (_x5) {
+          return _ref5.apply(this, arguments);
+        };
+      }()),
+          formValues = _Swal$fire$then3.value;
+    },
+    eliminarUsuario: function eliminarUsuario(usuario) {
+      var _this8 = this;
+
+      var swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
+      swalWithBootstrapButtons.fire({
+        title: '¿Estás seguro?',
+        html: "Se eliminará el usuario <strong>" + usuario.name + "</strong><br> No se podrá revertir",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'No, cancelar!',
+        confirmButtonColor: '#00DD00',
+        cancelButtonColor: '#DD0000',
+        reverseButtons: true
+      }).then( /*#__PURE__*/function () {
+        var _ref6 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(result) {
+          var url;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+            while (1) {
+              switch (_context6.prev = _context6.next) {
+                case 0:
+                  if (!result.isConfirmed) {
+                    _context6.next = 8;
+                    break;
+                  }
+
+                  url = '/perfil/' + usuario.id;
+                  _context6.next = 4;
+                  return axios["delete"](url).then(function (response) {
+                    console.log(response.data);
+                    _this8.mensaje = response.data;
+                  });
+
+                case 4:
+                  _this8.getUsuarios();
+
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'El usuario ha sido eliminada',
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                  _context6.next = 9;
+                  break;
+
+                case 8:
+                  if (
+                  /* Read more about handling dismissals below */
+                  result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'El usuario no se ha eliminado',
+                      showConfirmButton: false,
+                      timer: 1500
+                    });
+                  }
+
+                case 9:
+                case "end":
+                  return _context6.stop();
+              }
+            }
+          }, _callee6);
+        }));
+
+        return function (_x6) {
+          return _ref6.apply(this, arguments);
+        };
+      }());
     }
   },
   //despues que vue ejecuta realiza un comando
   mounted: function mounted() {
     this.getTareas();
+    this.getUsuarios();
   }
 });
 

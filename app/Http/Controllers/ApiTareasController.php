@@ -13,10 +13,7 @@ class ApiTareasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('auth.basic');
-    }
+    
 
     public function index(Request $request)
     {
@@ -30,6 +27,11 @@ class ApiTareasController extends Controller
         }
         
             return $consulta->orderBy('fecha_final','desc')-> get();
+    }
+    public function crearToken(Request $request){
+        $user = Auth::user();
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return($token);
     }
     /**
      * Show the form for creating a new resource.

@@ -33,10 +33,12 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
     data: {
       message: 'Hello Vue!',
       tareas: [],
+      usuarios:[],
     },
     methods:{
         getTareas(){
-            let url = '/tareas/consultar';
+            
+            let url = '/tareas/consultar_web';
             axios.get(url).then(response=>{
                 console.log(response.data)
                 this.tareas=response.data;
@@ -145,7 +147,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
                         }
                         console.log(tarea_entregar);
                         const answers = JSON.stringify(result.value);
-                        let url = '/tareas/crear';
+                        let url = '/tareas/crear_web';
                         await axios.post(url,tarea_entregar).then(response=>{
                             console.log(response.data);
                             this.mensaje=response.data;
@@ -183,7 +185,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
                 reverseButtons: true
               }).then(async (result) => {
                 if (result.isConfirmed) {
-                    let url ='/tareas/borrar/'+tarea.id
+                    let url ='/tareas/borrar_web/'+tarea.id
                     await axios.delete(url).then(response=>{
                         console.log(response.data)
                         this.mensaje=response.data;
@@ -322,7 +324,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
                     }
                     console.log(tarea_entregar);
                     const answers = JSON.stringify(result.value);
-                    let url = '/tareas/actualizar/'+tarea.id;
+                    let url = '/tareas/actualizar_web/'+tarea.id;
                     await axios.put(url,tarea_entregar).then(response=>{
                         console.log(response.data);
                         this.mensaje=response.data;
@@ -339,10 +341,209 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
             })
               
              
-        }
+        },
+        crearToken(){
+            let url = '/token';
+            axios.get(url).then(response=>{
+                console.log(response.data);
+                Swal.fire(
+                    'Tu nuevo Bearer token es:',
+                    response.data,
+                    'info'
+                  )
+            })
+            
+        },
+        getUsuarios(){
+            let url = '/perfil';
+            axios.get(url).then(response=>{
+                console.log(response.data);
+                this.usuarios=response.data;
+            })
+        },
+        cambiarPassword(usuario){
+            const { value: password } = Swal.fire({
+                title: 'Enter your password',
+                input: 'password',
+                inputLabel: 'Password',
+                inputPlaceholder: 'Enter your password',
+                inputAttributes: {
+                  maxlength: 10,
+                  autocapitalize: 'off',
+                  autocorrect: 'off'
+                }
+              })
+              .then(async(result) => {
+                if (result.value) {
+                    const usuario_entregar={
+                        id:usuario.id,
+                        password:result.value,
+                    }
+                    console.log(usuario_entregar);
+                    const answers = JSON.stringify(result.value);
+                    let url = '/perfil/'+usuario.id;
+                    await axios.put(url,usuario_entregar).then(response=>{
+                        console.log(response.data);
+                        this.mensaje=response.data;
+                    })
+                    this.getUsuarios();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Editado satisfactorio',
+                        showConfirmButton: false,
+                        timer: 1400
+                      })
+                }
+            })
+        },
+        cambiarDatosUsuarios(usuario){
+            
+            const { value: formValues } =  Swal.fire({
+                title: 'Editar Usuario',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Guardar',
+                html:
+                  '<h2>Nombre<h2>'+
+                  '<input id="swal-input1" value="'+
+                  usuario.name+
+                  '" class="swal2-input" >' +
+                  '<h2>Descripcion<h2>'+
+                  '<input id="swal-input2" value="'+
+                 usuario.email+
+                  '" class="swal2-input" type="email">',
+                focusConfirm: false,
+                preConfirm: () => {
+                    let name = document.getElementById('swal-input1').value;
+                    let email = document.getElementById('swal-input2').value;
+                    
+                    if (name==""){
+                        toastr["error"]("Nombre no debe ser vacío", "Error")
+                        toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": true,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                        }
+                        return false
+                    }
+                    if (email==""){
+                        toastr["error"]("Correo no debe ser vacío", "Error")
+                        toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": true,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                        }
+                        return false
+                    }
+                    else{
+                        return[ document.getElementById('swal-input1').value,document.getElementById('swal-input2').value]
+                    }
+                    
+                }
+              }).then(async(result) => {
+                if (result.value) {
+                    const usuario_entregar={
+                        id:usuario.id,
+                        name:result.value[0],
+                        email:result.value[1],
+                    }
+                    console.log(usuario_entregar);
+                    const answers = JSON.stringify(result.value);
+                    let url = '/perfil/'+usuario.id;
+                    await axios.put(url,usuario_entregar).then(response=>{
+                        console.log(response.data);
+                        this.mensaje=response.data;
+                    })
+                    this.getUsuarios();
+                    Swal.fire({
+                        
+                        icon: 'success',
+                        title: 'Editado satisfactorio',
+                        showConfirmButton: false,
+                        timer: 1400
+                      })
+                }
+            })
+              
+         
+        },
+        eliminarUsuario(usuario){
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+            
+            swalWithBootstrapButtons.fire({
+                title: '¿Estás seguro?',
+                html: "Se eliminará el usuario <strong>"+usuario.name+"</strong><br> No se podrá revertir",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'No, cancelar!',
+                confirmButtonColor:'#00DD00',
+                cancelButtonColor:'#DD0000',
+                reverseButtons: true
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    let url ='/perfil/'+usuario.id;
+                    await axios.delete(url).then(response=>{
+                        console.log(response.data)
+                        this.mensaje=response.data;
+                    });
+
+                    this.getUsuarios();
+                    Swal.fire({
+                            
+                        icon: 'success',
+                        title: 'El usuario ha sido eliminada',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Swal.fire({
+                            
+                        icon: 'error',
+                        title: 'El usuario no se ha eliminado',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+    },
     },
     //despues que vue ejecuta realiza un comando
     mounted(){ 
         this.getTareas();
+        this.getUsuarios();
     }
   })

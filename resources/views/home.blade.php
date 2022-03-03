@@ -13,9 +13,42 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                  <form id="myform "@submit.prevent="getFormValues">
+                    <div class="card-body">
+                      <div>
+                        <input type="radio" id="mostrar_todas" name="drone" 
+                               >
+                        <label for="mostrar_todas">Tareas de todos los usuarios</label>
+                      </div>
+                      
+                      <div>
+                        <input type="radio" id="no_mostrar_todas" name="drone"  checked>
+                        <label for="no_mostrar_todas">Tareas propias </label>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div>
+                        <input type="radio" id="mostrar_finalizadas"  name="drone2"
+                               >
+                        <label for="mostrar_finalizadas">Tareas completadas</label>
+                      </div>
+                      
+                      <div>
+                        <input type="radio" id="mostrar_sin_finalizar"  name="drone2" >
+                        <label for="mostrar_sin_finalizar">Tareas sin finalizar</label>
+                      </div>
 
+                      <div>
+                        <input type="radio" id="mostrar_sin_estado"  name="drone2" checked>
+                        <label for="mostrar_sin_estado">Tareas sin importar estado</label>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary float-start">Ejecutar</button>
+                  </form>
+                    
+                    
                     <button type="button" class="btn btn-primary float-end" @click="nuevaTarea()">Nuevo</button>
-                    <button type="button" class="btn btn-danger float-start" @click="crearToken()">Crear token</button>
+                    
                     <table class="table table">
                         <thead>
                             <tr>

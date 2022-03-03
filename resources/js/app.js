@@ -34,11 +34,61 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
       message: 'Hello Vue!',
       tareas: [],
       usuarios:[],
+      picked:[]
     },
     methods:{
+        getFormValues (submitEvent) {
+            this.picked[0] = submitEvent.target.elements.mostrar_todas.checked;
+            if(submitEvent.target.elements.mostrar_finalizadas.checked){
+                this.picked[1]=1;
+            }
+            else if(submitEvent.target.elements.mostrar_sin_finalizar.checked){
+                this.picked[1]=2;
+            }
+            else{
+                this.picked[1]=3;
+            }
+            this.getTareas();
+            //console.log(this.picked)
+          },
         getTareas(){
+            let estado;
+            let user_id;
+            if(this.picked.length==0){
+                user_id=-1;
+                estado=-1;
+            }
+            if(this.picked[0]==false){
+                    user_id=-1;
+            }
+            else if(this.picked[0]==true){
+                user_id=-2;
+            }
+
+            if((this.picked[1]==1)){
+                estado=1; //solo altos 
+            }
+            else if((this.picked[1]==2)){
+                estado=0;
+            }
+            else{
+                estado=-1; //muestra todos
+            }
+            let url = '/tareas/consultar_web';
+            axios.get(url,{
+                headers: {
+                  'user_id': user_id,
+                  'estado': estado
+                }
+              }).then(response=>{
+                console.log(response.data)
+                this.tareas=response.data;
+            })
+        },
+        getTodasTareas(){
             
             let url = '/tareas/consultar_web';
+            
             axios.get(url).then(response=>{
                 console.log(response.data)
                 this.tareas=response.data;

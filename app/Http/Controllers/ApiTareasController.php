@@ -19,11 +19,17 @@ class ApiTareasController extends Controller
     {
         
         $consulta = new Tareas;
-        if($request->header('estado')!=NULL){
+        if(($request->header('estado')!=NULL)&&($request->header('estado')!=-1)){
             $consulta=$consulta->where('estado',$request->header('estado'));
         }
-        if($request->header('user_id')!=NULL){
-            $consulta=$consulta->where('user_id',$request->header('user_id'));
+        if($request->header('user_id')!=NULL){ 
+            if($request->header('user_id')==-1){
+                $consulta=$consulta->where('user_id',Auth::id());
+            }
+            else if ($request->header('user_id')!=-2){ //-2 significa que entra a todos 
+                $consulta=$consulta->where('user_id',$request->header('user_id'));
+            }
+           
         }
         
             return $consulta->orderBy('fecha_final','desc')-> get();
@@ -58,7 +64,12 @@ class ApiTareasController extends Controller
         $datos->fecha_inicio =$request->fecha_inicio;
         $datos->fecha_final =$request->fecha_final;
         $datos->user_id =Auth::id();
-        $datos->estado = 0;
+        if($request->estado!=NULL){
+            $datos->estado=$request->estado;
+        }
+        else{
+            $datos->estado = 0;
+        }
         $datos->save();
         echo $datos;
         return 'Datos Guardados correctamente';

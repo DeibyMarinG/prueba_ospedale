@@ -13,6 +13,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    <button type="button" class="btn btn-danger float-start" @click="crearToken()">Crear token</button>
                     <table class="table table">
                       <thead>
                           <tr>

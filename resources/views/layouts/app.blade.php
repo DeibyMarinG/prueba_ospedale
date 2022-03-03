@@ -88,6 +88,9 @@
                                     <a href="{{ url('/perfiles') }}"  class="dropdown-item">
                                         Perfil
                                     </a>
+                                    <a href="{{ url('/home') }}"  class="dropdown-item">
+                                        Home
+                                    </a>
                                 </div>
                             </li>
                         @endguest

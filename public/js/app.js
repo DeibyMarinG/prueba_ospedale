@@ -5446,20 +5446,70 @@ var app = new Vue({
   data: {
     message: 'Hello Vue!',
     tareas: [],
-    usuarios: []
+    usuarios: [],
+    picked: []
   },
   methods: {
+    getFormValues: function getFormValues(submitEvent) {
+      this.picked[0] = submitEvent.target.elements.mostrar_todas.checked;
+
+      if (submitEvent.target.elements.mostrar_finalizadas.checked) {
+        this.picked[1] = 1;
+      } else if (submitEvent.target.elements.mostrar_sin_finalizar.checked) {
+        this.picked[1] = 2;
+      } else {
+        this.picked[1] = 3;
+      }
+
+      this.getTareas(); //console.log(this.picked)
+    },
     getTareas: function getTareas() {
       var _this = this;
 
+      var estado;
+      var user_id;
+
+      if (this.picked.length == 0) {
+        user_id = -1;
+        estado = -1;
+      }
+
+      if (this.picked[0] == false) {
+        user_id = -1;
+      } else if (this.picked[0] == true) {
+        user_id = -2;
+      }
+
+      if (this.picked[1] == 1) {
+        estado = 1; //solo altos 
+      } else if (this.picked[1] == 2) {
+        estado = 0;
+      } else {
+        estado = -1; //muestra todos
+      }
+
       var url = '/tareas/consultar_web';
-      axios.get(url).then(function (response) {
+      axios.get(url, {
+        headers: {
+          'user_id': user_id,
+          'estado': estado
+        }
+      }).then(function (response) {
         console.log(response.data);
         _this.tareas = response.data;
       });
     },
-    nuevaTarea: function nuevaTarea() {
+    getTodasTareas: function getTodasTareas() {
       var _this2 = this;
+
+      var url = '/tareas/consultar_web';
+      axios.get(url).then(function (response) {
+        console.log(response.data);
+        _this2.tareas = response.data;
+      });
+    },
+    nuevaTarea: function nuevaTarea() {
+      var _this3 = this;
 
       console.log("nuevo dato");
       Swal.mixin({
@@ -5565,11 +5615,11 @@ var app = new Vue({
                   _context.next = 7;
                   return axios.post(url, tarea_entregar).then(function (response) {
                     console.log(response.data);
-                    _this2.mensaje = response.data;
+                    _this3.mensaje = response.data;
                   });
 
                 case 7:
-                  _this2.getTareas();
+                  _this3.getTareas();
 
                   Swal.fire({
                     icon: 'success',
@@ -5592,7 +5642,7 @@ var app = new Vue({
       }());
     },
     eliminarTarea: function eliminarTarea(tarea) {
-      var _this3 = this;
+      var _this4 = this;
 
       console.log(tarea);
       var swalWithBootstrapButtons = Swal.mixin({
@@ -5628,11 +5678,11 @@ var app = new Vue({
                   _context2.next = 4;
                   return axios["delete"](url).then(function (response) {
                     console.log(response.data);
-                    _this3.mensaje = response.data;
+                    _this4.mensaje = response.data;
                   });
 
                 case 4:
-                  _this3.getTareas();
+                  _this4.getTareas();
 
                   Swal.fire({
                     icon: 'success',
@@ -5669,7 +5719,7 @@ var app = new Vue({
       }());
     },
     editarTarea: function editarTarea(tarea) {
-      var _this4 = this;
+      var _this5 = this;
 
       var _Swal$fire$then = Swal.fire({
         title: 'Editar Tarea',
@@ -5773,11 +5823,11 @@ var app = new Vue({
                   _context3.next = 7;
                   return axios.put(url, tarea_entregar).then(function (response) {
                     console.log(response.data);
-                    _this4.mensaje = response.data;
+                    _this5.mensaje = response.data;
                   });
 
                 case 7:
-                  _this4.getTareas();
+                  _this5.getTareas();
 
                   Swal.fire({
                     icon: 'success',
@@ -5808,16 +5858,16 @@ var app = new Vue({
       });
     },
     getUsuarios: function getUsuarios() {
-      var _this5 = this;
+      var _this6 = this;
 
       var url = '/perfil';
       axios.get(url).then(function (response) {
         console.log(response.data);
-        _this5.usuarios = response.data;
+        _this6.usuarios = response.data;
       });
     },
     cambiarPassword: function cambiarPassword(usuario) {
-      var _this6 = this;
+      var _this7 = this;
 
       var _Swal$fire$then2 = Swal.fire({
         title: 'Enter your password',
@@ -5851,11 +5901,11 @@ var app = new Vue({
                   _context4.next = 7;
                   return axios.put(url, usuario_entregar).then(function (response) {
                     console.log(response.data);
-                    _this6.mensaje = response.data;
+                    _this7.mensaje = response.data;
                   });
 
                 case 7:
-                  _this6.getUsuarios();
+                  _this7.getUsuarios();
 
                   Swal.fire({
                     icon: 'success',
@@ -5879,7 +5929,7 @@ var app = new Vue({
           password = _Swal$fire$then2.value;
     },
     cambiarDatosUsuarios: function cambiarDatosUsuarios(usuario) {
-      var _this7 = this;
+      var _this8 = this;
 
       var _Swal$fire$then3 = Swal.fire({
         title: 'Editar Usuario',
@@ -5961,11 +6011,11 @@ var app = new Vue({
                   _context5.next = 7;
                   return axios.put(url, usuario_entregar).then(function (response) {
                     console.log(response.data);
-                    _this7.mensaje = response.data;
+                    _this8.mensaje = response.data;
                   });
 
                 case 7:
-                  _this7.getUsuarios();
+                  _this8.getUsuarios();
 
                   Swal.fire({
                     icon: 'success',
@@ -5989,7 +6039,7 @@ var app = new Vue({
           formValues = _Swal$fire$then3.value;
     },
     eliminarUsuario: function eliminarUsuario(usuario) {
-      var _this8 = this;
+      var _this9 = this;
 
       var swalWithBootstrapButtons = Swal.mixin({
         customClass: {
@@ -6024,11 +6074,11 @@ var app = new Vue({
                   _context6.next = 4;
                   return axios["delete"](url).then(function (response) {
                     console.log(response.data);
-                    _this8.mensaje = response.data;
+                    _this9.mensaje = response.data;
                   });
 
                 case 4:
-                  _this8.getUsuarios();
+                  _this9.getUsuarios();
 
                   Swal.fire({
                     icon: 'success',

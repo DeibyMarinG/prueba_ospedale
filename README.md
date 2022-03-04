@@ -27,10 +27,75 @@ Para hacer funcionar el sistema se deben ejecutar los siguientes comandos una ve
 
 Las rutas api son:
 
-Consultar: http://localhost:8000/tareas/consultar/id
+Consultar: http://localhost:8000/tareas/consultar
+    permite consultar todas las tareas de los usuarios
+
+requiere autenticacion por bearer-token
+campos opcionales:
+    -estado     Int (ingrese 0 para tareas sin completar y 1 tareas completadas)
+    -user_id
+respuesta ejemplo:
+[
+    {
+        "id":
+        "nombre":
+        "descripcion"
+        "fecha_inicio":
+        "fecha_final":
+        "user_id":
+        "estado":
+    },
+    {
+        "id":
+        "nombre":
+        "descripcion"
+        "fecha_inicio":
+        "fecha_final":
+        "user_id":
+        "estado":
+    }
+]
+    
 
 Crear: http://localhost:8000/tareas/crear
-
+    permite crear las tareas
+requiere autenticacion por bearer-token
+peticion ejemplo:
+    {
+        "nombre":
+        "descripcion"
+        "fecha_inicio":
+        "fecha_final":
+        "user_id":
+        "estado":
+    }
+respuesta ejemplo:
+    {
+        "id":
+        "nombre":
+        "descripcion"
+        "fecha_inicio":
+        "fecha_final":
+        "user_id":
+        "estado":
+    } Datos Guardados correctamente
+    
 Eliminar:http://localhost:8000/tareas/borrar/id
+    permite eliminar las tareas
+requiere autenticacion por bearer-token
+
 
 Actualizar: http://localhost:8000/tareas/actualizar/id
+    permite actualizar campos de una tarea
+requiere autenticacion por bearer-token
+requiere ingresar todos los campos conocidos
+peticion ejemplo:
+    {
+        "id":
+        "nombre":
+        "descripcion"
+        "fecha_inicio":
+        "fecha_final":
+        "user_id":
+        "estado":
+    }

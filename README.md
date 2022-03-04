@@ -14,10 +14,13 @@ El sistema fue desarrollado en laravel 9, con PHP 8.1.2, EL paquete XAMP provee 
 ## Hacer funcionar el sistema
 
 Para hacer funcionar el sistema se deben ejecutar los siguientes comandos una vez instaladas las dependencias.
-
+- npm install laravel-mix@latest
+- npm install
+- composer update
+- composer install
 - npm run dev 
-- php artisan db:seed
 - php artisan migrate
+- php artisan db:seed
 
 
 ## Rutas API
